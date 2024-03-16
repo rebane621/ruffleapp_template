@@ -11,7 +11,7 @@ android {
         applicationId = "com.github.rebane621.ruffleapk"
         minSdk = 21
         targetSdk = 34
-        versionCode = 1
+        versionCode = 24031622
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

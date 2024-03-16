@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import sys
 import os.path
 import re
 import shutil
@@ -58,6 +59,7 @@ def patchWith(properties):
     ])
     
     # patch java package to {APP_PACKAGE}
+    print(f"-- Relocating package to {properties['APP_PACKAGE']} ...")
     javabase = Path('app/src/main/java')
     oldpath = list(javabase.rglob("MainActivity.java"))[0].parent
     newpath = javabase / '/'.join(properties['APP_PACKAGE'].split('.'))
@@ -71,14 +73,14 @@ def patchWith(properties):
         for file in os.listdir(newpath):
             patchFile(newpath / file, [(oldpackage, properties['APP_PACKAGE'])])
     
-    code = datetime.datetime.today().strftime('%Y%m%d%H')  # for uint32 this holds until the year 2147
-    patchFile('build.gradle.kts', [
+    code = datetime.datetime.today().strftime('%y%m%d%H')  # for uint32 this holds until the year 2099
+    patchFile('app/build.gradle.kts', [
         # patch build.gradle.kts namespace = "{APP_PACKAGE}"
         (re.compile(r"\bnamespace *= *\".*\""), f"namespace = \"{properties['APP_PACKAGE']}\""),
         # patch build.gradle.kts applicationId = "{APP_PACKAGE}"
         (re.compile(r"\bapplicationId *= *\".*\""), f"applicationId = \"{properties['APP_PACKAGE']}\""),
         # patch build.gradle.kts versionCode = 1
-        (re.compile(r"\bversionCode *= *[0-9]+"), f"versionCode = \"{code}\""),
+        (re.compile(r"\bversionCode *= *[0-9]+"), f"versionCode = {code}"),
         # patch build.gradle.kts versionName = "1.0"
         (re.compile(r"\bversionName *= *\".*\""), f"versionName = \"{properties['APP_VERSION']}\""),
     ])
@@ -91,9 +93,12 @@ def patchWith(properties):
 
 def invokeBuild():
     print("-- Building APK image ...")
-    ret = subprocess.run(["gradlew", "clean", "build"], shell=True)
+    ret = subprocess.run(["gradlew", "clean", "build"], shell=True).returncode
     if ret == 0:
-        shutil.copy2('app/build/outputs/apk/release/app-release-unsigned.apk', './ruffleapp.apk')
+        shutil.copy2('app/build/outputs/apk/release/app-release-unsigned.apk', 'ruffle_unsigned.apk')
+        print("-- DONE")
+    else:
+        print(f"-- Build return with exit code {ret}!")
 
 
 def main():
@@ -128,4 +133,5 @@ def main():
 
 
 if __name__ == "__main__":
+    os.chdir(sys.path[0])
     main()
