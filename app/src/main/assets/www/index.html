@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>RuffleAPK</title>
+	<script>
+		window.RufflePlayer = window.RufflePlayer || {};
+		window.RufflePlayer.config = {
+			// Options affecting the whole page
+			"publicPath": undefined,
+			"polyfills": true,
+
+			// Options affecting files only
+			"allowScriptAccess": false, // Polyfill elements have a different default value, see the allowScriptAccess section
+			"autoplay": "on", // auto play needs to be off for files with sound ...
+			"unmuteOverlay": "hidden", // ... but we want instant play instead
+			"backgroundColor": "#202020",
+			"wmode": "window",
+			"letterbox": "fullscreen",
+			"warnOnUnsupportedContent": true,
+			"contextMenu": "on",
+			"showSwfDownload": false,
+			"upgradeToHttps": window.location.protocol === "https:",
+			"maxExecutionDuration": 15,
+			"logLevel": "error",
+			"base": null,
+			"menu": true,
+			"salign": "",
+			"forceAlign": false,
+			"scale": "showAll",
+			"forceScale": true,
+			"frameRate": null,
+			"quality": "best",
+			"splashScreen": true,
+			"preferredRenderer": null,
+			"openUrlMode": "allow",
+			"allowNetworking": "all",
+			"favorFlash": true,
+			"socketProxy": [],
+			"fontSources": [],
+			"defaultFonts": {},
+			"credentialAllowList": [],
+			"playerRuntime": "flashPlayer",
+		};
+		window.addEventListener("DOMContentLoaded", () => {
+			let ruffle = window.RufflePlayer.newest();
+			window.swfplayer = ruffle.createPlayer();
+			let container = document.getElementById('container');
+			container.appendChild(window.swfplayer);
+			window.swfplayer.load("flash_movie.swf");
+		});
+	</script>
+	<script src="ruffle.js"></script>
+	<style>
+		* {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+		#container {
+			width: 100vw;
+			height: 100vh;
+			margin: 0;
+			padding: 0;
+			background: #202072;
+		}
+		ruffle-player {
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			width: unset;
+			height: unset;
+		}
+	</style>
+</head><body>
+	<div id="container"></div>
+</body>
+</html>
