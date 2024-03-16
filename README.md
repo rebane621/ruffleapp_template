@@ -16,3 +16,5 @@ If you're not satisfied with unsigned APKs, you can then hop back into Android S
 
 An arbitrary version of Ruffle is already dumped into the assets directory for easier use, but you might want to get a newer version from
 either [ruffle.rs](https://ruffle.rs/) or their [GitHub repo](https://github.com/ruffle-rs/ruffle)
+
+        To get started, click the green `Code` button above and pick `Download ZIP`
